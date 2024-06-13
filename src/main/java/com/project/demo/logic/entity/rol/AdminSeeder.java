@@ -30,6 +30,7 @@ public class AdminSeeder implements ApplicationListener<ContextRefreshedEvent> {
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         this.createSuperAdministrator();
+        this.createDefaultUser();
     }
 
     private void createSuperAdministrator() {
@@ -39,7 +40,7 @@ public class AdminSeeder implements ApplicationListener<ContextRefreshedEvent> {
         superAdmin.setEmail("super.admin@gmail.com");
         superAdmin.setPassword("superadmin123");
 
-        Optional<Role> optionalRole = roleRepository.findByName(RoleEnum.SUPER_ADMIN);
+        Optional<Role> optionalRole = roleRepository.findByName(RoleEnum.SUPER_ADMIN_ROLE);
         Optional<User> optionalUser = userRepository.findByEmail(superAdmin.getEmail());
 
         if (optionalRole.isEmpty() || optionalUser.isPresent()) {
@@ -51,6 +52,29 @@ public class AdminSeeder implements ApplicationListener<ContextRefreshedEvent> {
         user.setLastname(superAdmin.getLastname());
         user.setEmail(superAdmin.getEmail());
         user.setPassword(passwordEncoder.encode(superAdmin.getPassword()));
+        user.setRole(optionalRole.get());
+
+        userRepository.save(user);
+    }
+    private void createDefaultUser() {
+        User defaultUser = new User();
+        defaultUser.setName("Jose");
+        defaultUser.setLastname("Vargas");
+        defaultUser.setEmail("jose@gmail.com");
+        defaultUser.setPassword("9Varguitas");
+
+        Optional<Role> optionalRole = roleRepository.findByName(RoleEnum.USER);
+        Optional<User> optionalUser = userRepository.findByEmail(defaultUser.getEmail());
+
+        if (optionalRole.isEmpty() || optionalUser.isPresent()) {
+            return;
+        }
+
+        var user = new User();
+        user.setName(defaultUser.getName());
+        user.setLastname(defaultUser.getLastname());
+        user.setEmail(defaultUser.getEmail());
+        user.setPassword(passwordEncoder.encode(defaultUser.getPassword()));
         user.setRole(optionalRole.get());
 
         userRepository.save(user);
