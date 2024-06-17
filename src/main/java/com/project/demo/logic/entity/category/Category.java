@@ -15,17 +15,15 @@ public class Category {
     private String name;
     @Column(length = 500)
     private String description;
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Product> products;
+
 
     public Category() {
     }
 
-    public Category(Long id, String name, String description, List<Product> products) {
+    public Category(Long id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.products = products;
     }
 
     public Long getId() {
@@ -50,13 +48,5 @@ public class Category {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
     }
 }

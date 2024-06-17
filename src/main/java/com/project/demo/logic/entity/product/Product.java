@@ -1,7 +1,12 @@
 package com.project.demo.logic.entity.product;
 
 import com.project.demo.logic.entity.category.Category;
+import com.project.demo.logic.entity.rol.Role;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.math.BigDecimal;
 
 @Entity
@@ -21,23 +26,14 @@ public class Product {
 
     @Column(nullable = false)
     private int stock;
-
     @ManyToOne(fetch = FetchType.EAGER)
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "categoria_id", referencedColumnName = "id", nullable = true)
+
     private Category category;
 
     public Product() {
     }
-
-    public Product(Long id, String name, String description, BigDecimal price, int stock, Category category) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.stock = stock;
-        this.category = category;
-    }
-
     public Long getId() {
         return id;
     }
